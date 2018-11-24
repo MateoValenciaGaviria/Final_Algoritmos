@@ -3,6 +3,8 @@ package valenciaPerdomoCastanedaMarmolejo;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
+	
+	private Logica log;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -10,23 +12,32 @@ public class Main extends PApplet {
 	}
 
 	public void settings() {
-
+		size(1200,700);
 	}
 
 	public void setup() {
-
+		log = new Logica(this);
+		log.start();
 	}
 
 	public void draw() {
-
+		background(0);
+		log.pintar();
+		fill(255);
+		text("X: "+mouseX+"Y: "+mouseY, mouseX, mouseY);
+		noFill();
 	}
 
 	public void mousePressed() {
-
+		log.mousePressed();
 	}
 
 	public void keyPressed() {
-
+		log.keyPressed();
+	}
+	
+	public void keyReleased(){
+		log.keyReleassed();
 	}
 
 }

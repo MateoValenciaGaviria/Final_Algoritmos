@@ -14,17 +14,24 @@ public class Enemigo extends Personaje {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-
+		while (vivo) {
+			try {
+				sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
-	public void mover() {
+	public void pintar() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void recogerElementos() {
+	public void mover() {
 		// TODO Auto-generated method stub
 
 	}
