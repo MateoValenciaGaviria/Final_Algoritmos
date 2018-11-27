@@ -27,23 +27,24 @@ public class Jugador extends Personaje {
 		// TODO Auto-generated method stub
 		while (vivo) {
 			recogerElementos();
+			recogerRastros();
 			if (arriba) {
-				if(pos.y > 60){
+				if (pos.y > 60) {
 					pos.y = pos.y - vel.y;
 				}
 			}
 			if (abajo) {
-				if(pos.y < app.height-25){
+				if (pos.y < app.height - 25) {
 					pos.y = pos.y + vel.y;
 				}
 			}
 			if (derecha) {
-				if(pos.x < app.width-25){
+				if (pos.x < app.width - 25) {
 					pos.x = pos.x + vel.x;
 				}
 			}
 			if (izquierda) {
-				if(pos.x > 25){
+				if (pos.x > 25) {
 					pos.x = pos.x - vel.x;
 				}
 			}
@@ -64,15 +65,15 @@ public class Jugador extends Personaje {
 		switch (tipo) {
 		case 1:
 			app.fill(255);
-			app.text(nivel, pos.x, pos.y-40);
+			app.text(nivel, pos.x, pos.y - 40);
 			app.fill(255);
 			app.ellipse(pos.x, pos.y, tam, tam);
 			// app.image(jugador1, pos.x, pos.y);
 			break;
 		case 2:
 			app.fill(255);
-			app.text(nivel, pos.x, pos.y-40);
-			app.fill(255,0,0);
+			app.text(nivel, pos.x, pos.y - 40);
+			app.fill(255, 0, 0);
 			app.ellipse(pos.x, pos.y, tam, tam);
 			// app.image(jugador2, pos.x, pos.y);
 			break;
@@ -156,6 +157,16 @@ public class Jugador extends Personaje {
 			}
 		}
 	}
+	
+	public void recogerRastros() {
+		for (int i = 0; i < log.getRecogiblesMalos().size(); i++) {
+			if ((pos.dist(log.getRecogiblesMalos().get(i).getPos()) < tam)) {
+				rastros.add(log.getRecogiblesMalos().get(i));
+				log.getRecogiblesMalos().remove(i);
+				nivel-=5;//acomodar lo que va a quitar
+			}
+		}
+	}
 
 	public void aplicarRecolectables() {
 		for (int i = 0; i < recolectables.size(); i++) {
@@ -179,16 +190,20 @@ public class Jugador extends Personaje {
 	public void validarChoqueJugadores(Jugador j) {
 		if (PApplet.dist(pos.x, pos.y, j.getPos().x, j.getPos().y) < tam) {
 			if (nivel > j.getNivel()) {
-				if(j.getNivel() > 0){
-					nivel ++;	
+				if (j.getNivel() > 0) {
+					nivel++;
 				}
 			} else if (nivel < j.getNivel()) {
-				if(nivel > 0){
-					 nivel --;
+				if (nivel > 0) {
+					nivel--;
 				}
 			}
 		}
 
+	}
+
+	public void restarNivel(int i) {
+		nivel -= i;
 	}
 
 	public void setNivel(int nivel) {

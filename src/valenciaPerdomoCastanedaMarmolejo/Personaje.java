@@ -13,6 +13,7 @@ public abstract class Personaje extends Thread {
 	protected int tam, nivel;
 	protected boolean vivo;
 	protected LinkedList<Recolectable> recolectables;
+	protected LinkedList<RecogibleMalo> rastros;
 
 	public Personaje(Main app, Logica log) {
 		this.app = app;
@@ -23,6 +24,7 @@ public abstract class Personaje extends Thread {
 		this.nivel = 0;
 		this.vivo = true;
 		this.recolectables = new LinkedList<Recolectable>();
+		this.rastros = new LinkedList<RecogibleMalo>();
 	}
 
 	public abstract void run();
