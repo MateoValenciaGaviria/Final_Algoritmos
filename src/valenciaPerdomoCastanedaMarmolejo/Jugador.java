@@ -2,13 +2,15 @@ package valenciaPerdomoCastanedaMarmolejo;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.core.PVector;
 
 public class Jugador extends Personaje {
 
 	private PImage jugador1;
 	private PImage jugador2;
 	private int tipo;
-	private boolean arriba, abajo, izquierda, derecha;
+	private int tiempo;
+	private boolean arriba, abajo, izquierda, derecha, rastro1, ralentizado;
 
 	public Jugador(Main app, Logica log, int tipo) {
 		super(app, log);
@@ -20,6 +22,9 @@ public class Jugador extends Personaje {
 		this.abajo = false;
 		this.izquierda = false;
 		this.derecha = false;
+		this.rastro1 = false;
+		this.ralentizado = false;
+		this.tiempo = 0;
 	}
 
 	@Override
@@ -46,6 +51,14 @@ public class Jugador extends Personaje {
 			if (izquierda) {
 				if (pos.x > 25) {
 					pos.x = pos.x - vel.x;
+				}
+			}
+
+			if (rastro1) {
+				this.vel = new PVector(1, 1);
+				if (tiempo + 5000 < app.millis()) {
+					this.vel = new PVector(5, 5);
+					rastro1=false;
 				}
 			}
 
@@ -157,13 +170,14 @@ public class Jugador extends Personaje {
 			}
 		}
 	}
-	
+
 	public void recogerRastros() {
 		for (int i = 0; i < log.getRecogiblesMalos().size(); i++) {
 			if ((pos.dist(log.getRecogiblesMalos().get(i).getPos()) < tam)) {
 				rastros.add(log.getRecogiblesMalos().get(i));
 				log.getRecogiblesMalos().remove(i);
-				nivel-=5;//acomodar lo que va a quitar
+				tiempo= app.millis();
+				rastro1 = true;
 			}
 		}
 	}

@@ -23,7 +23,7 @@ public class Logica extends Thread {
 		this.app = app;
 		this.tiempo = 0;
 		this.tRastro = 0;
-		this.pantalla = 2;
+		this.pantalla = 4;
 		this.vivo = true;
 		this.contador = true;
 		this.recolectables = new LinkedList<Recolectable>();
@@ -65,12 +65,18 @@ public class Logica extends Thread {
 					}
 					tRastro = app.millis();
 				}
+				
+				for (int i = 0; i < enemigos.length; i++) {
+					enemigos[i].mover();
+				}
 				break;
 			case 3:
 
 				break;
 			case 4:
-
+				for (int i = 0; i < enemigos.length; i++) {
+					enemigos[i].mover();
+				}
 				break;
 			case 5:
 
@@ -107,7 +113,6 @@ public class Logica extends Thread {
 			}
 			for (int i = 0; i < enemigos.length; i++) {
 				enemigos[i].pintar();
-				enemigos[i].mover();
 			}
 			for (int i = 0; i < recogiblesMalos.size(); i++) {
 				recogiblesMalos.get(i).pintar();
@@ -117,7 +122,11 @@ public class Logica extends Thread {
 
 			break;
 		case 4:
-
+			jugador1.pintar();
+			jugador2.pintar();
+			for (int i = 0; i < enemigos.length; i++) {
+				enemigos[i].pintar();
+			}
 			break;
 		case 5:
 
@@ -151,13 +160,15 @@ public class Logica extends Thread {
 
 			break;
 		case 4:
-
+			jugador1.mover();
+			jugador2.mover();
 			break;
 		case 5:
 
 			break;
 		case 6:
-
+			jugador1.mover();
+			jugador2.mover();
 			break;
 		case 7:
 
@@ -181,13 +192,15 @@ public class Logica extends Thread {
 
 			break;
 		case 4:
-
+			jugador1.soltar();
+			jugador2.soltar();
 			break;
 		case 5:
 
 			break;
 		case 6:
-
+			jugador1.soltar();
+			jugador2.soltar();
 			break;
 		case 7:
 

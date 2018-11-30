@@ -7,12 +7,11 @@ public class Enemigo extends Personaje {
 
 	private PImage[] enemigos;
 	private PVector rand;
-	private int tipo, rand1, rand2;
+	private int rand1, rand2;
 	private boolean vivo, mover1;
 
 	public Enemigo(Main app, Logica log, int tipo) {
 		super(app, log);
-		this.tipo = tipo;
 		this.mover1 = true;
 		this.vivo = true;
 	}
@@ -21,13 +20,23 @@ public class Enemigo extends Personaje {
 	public void run() {
 		// TODO Auto-generated method stub
 		while (vivo) {
-			if (log.getPantalla() == 2) {
+			switch (log.getPantalla()) {
+			case 2:
 				if (mover1) {
 					rand1 = (int) app.random(tam, app.width - tam);
-					rand2 = (int) app.random(tam, app.height - tam);
+					rand2 = (int) app.random(tam, app.height - 200);
 					rand = new PVector(rand1, rand2);
 					mover1 = false;
 				}
+				break;
+			case 4:
+				if (mover1) {
+					rand1 = (int) app.random(tam, app.width - tam);
+					rand2 = (int) app.random(tam, app.height - 200);
+					rand = new PVector(rand1, rand2);
+					mover1 = false;
+				}
+				break;
 			}
 
 			try {
@@ -41,37 +50,38 @@ public class Enemigo extends Personaje {
 
 	@Override
 	public void pintar() {
-		switch (tipo) {
-		case 1:
+		switch (log.getPantalla()) {
+		case 2:
 			app.noStroke();
 			app.fill(100, 100, 100);
 			app.ellipse(pos.x, pos.y, tam, tam);
 			break;
 
-		case 2:
+		case 4:
+			app.noStroke();
+			app.fill(100, 100, 100);
+			app.ellipse(pos.x, pos.y, tam, tam);
 			break;
 
-		case 3:
-			break;
 		}
 
 	}
 
 	public void crearRastro(int tipo) {
-		//System.out.println("in");
+		// System.out.println("in");
 		RecogibleMalo r = new RecogibleMalo(app, tipo);
-		PVector posi = new PVector(this.pos.x,this.pos.y);
+		PVector posi = new PVector(this.pos.x, this.pos.y);
 		r.setPos(posi);
 		log.setRecogiblesMalos(r);
 	}
 
 	@Override
 	public void mover() {
-		switch (tipo) {
+		switch (log.getPantalla()) {
 
-		case 1:
+		case 2:
 			if (pos.x < rand1) {
-				pos.x +=2;
+				pos.x += 2;
 			}
 			if (pos.x > rand1) {
 				pos.x -= 2;
@@ -88,10 +98,60 @@ public class Enemigo extends Personaje {
 			}
 			break;
 
-		case 2:
-			break;
+		case 4:
+			if (log.getJugador1().getPos().x > tam && log.getJugador1().getPos().x < app.width - tam
+					&& log.getJugador1().getPos().y > tam && log.getJugador1().getPos().y < app.height - 200) {
 
-		case 3:
+				vel = new PVector(4, 4);
+				if (pos.x < log.getJugador1().getPos().x) {
+					pos.x += vel.x;
+				}
+				if (pos.x > log.getJugador1().getPos().x) {
+					pos.x -= vel.x;
+				}
+				if (pos.y < log.getJugador1().getPos().y) {
+					pos.y += vel.y;
+				}
+				if (pos.y > log.getJugador1().getPos().y) {
+					pos.y -= vel.y;
+				}
+
+			}
+			if (log.getJugador2().getPos().x > tam && log.getJugador2().getPos().x < app.width - tam
+					&& log.getJugador2().getPos().y > tam && log.getJugador2().getPos().y < app.height - 200) {
+
+				vel = new PVector(4, 4);
+				if (pos.x < log.getJugador2().getPos().x) {
+					pos.x += vel.x;
+				}
+				if (pos.x > log.getJugador2().getPos().x) {
+					pos.x -= vel.x;
+				}
+				if (pos.y < log.getJugador2().getPos().y) {
+					pos.y += vel.y;
+				}
+				if (pos.y > log.getJugador2().getPos().y) {
+					pos.y -= vel.y;
+				}
+			} else {
+				if (pos.x < rand1) {
+					pos.x += 2;
+				}
+				if (pos.x > rand1) {
+					pos.x -= 2;
+				}
+				if (pos.y < rand2) {
+					pos.y += 2;
+				}
+				if (pos.y > rand2) {
+					pos.y -= 2;
+				}
+
+				if (pos.dist(rand) < 10) {
+					mover1 = true;
+				}
+			}
+
 			break;
 		}
 	}
