@@ -9,8 +9,8 @@ import processing.core.PVector;
 public class Logica extends Thread {
 
 	private Main app;
-	private int tiempo, tRastro, pantalla, progreso1, progreso2, elementosEntrega1p1, elementosEntrega2p1, elementosEntrega1p2,
-			elementosEntrega2p2;
+	private int tiempo, tRastro, pantalla, progreso1, progreso2, elementosEntrega1p1, elementosEntrega2p1,
+			elementosEntrega1p2, elementosEntrega2p2;
 	private LinkedList<Recolectable> recolectables;
 	private LinkedList<RecogibleMalo> recogiblesMalos;
 	private Jugador jugador1;
@@ -18,12 +18,15 @@ public class Logica extends Thread {
 	private Enemigo[] enemigos = new Enemigo[5];
 	private PImage[] niveles;
 	private boolean vivo, contador;
+	private float tam1, tam2;
 
 	public Logica(Main app) {
 		this.app = app;
 		this.tiempo = 0;
 		this.tRastro = 0;
-		this.pantalla = 4;
+		this.pantalla = 2;
+		this.tam1 = 0;
+		this.tam2 = 0;
 		this.vivo = true;
 		this.contador = true;
 		this.recolectables = new LinkedList<Recolectable>();
@@ -65,7 +68,6 @@ public class Logica extends Thread {
 					}
 					tRastro = app.millis();
 				}
-				
 				for (int i = 0; i < enemigos.length; i++) {
 					enemigos[i].mover();
 				}
@@ -74,8 +76,28 @@ public class Logica extends Thread {
 
 				break;
 			case 4:
+				if (contador) {
+					tiempo = app.millis() - 5000;
+					contador = false;
+				}
+				crearRecolecables();
 				for (int i = 0; i < enemigos.length; i++) {
 					enemigos[i].mover();
+				}
+
+				if (jugador1.getPos().x > 0 && jugador1.getPos().x < 200 && jugador1.getPos().y > 500
+						&& jugador1.getPos().y < app.height) {
+					if (tam1 < 200) {
+						tam1 += 0.3;
+					}
+				}
+
+				if (jugador2.getPos().x > 1000 && jugador2.getPos().x < app.width && jugador2.getPos().y > 500
+						&& jugador2.getPos().y < app.height) {
+					if (tam2 < 200) {
+						tam2 += 0.3;
+						System.out.println("adentro");
+					}
 				}
 				break;
 			case 5:
@@ -122,8 +144,17 @@ public class Logica extends Thread {
 
 			break;
 		case 4:
+			app.fill(100);
+			app.rect(0, 500, 200, 200);// pc del jugador de la izquierda
+			app.rect(1000, 500, 200, 200);// pc del jugador de la derecha
+			app.fill(0, 200, 200);
+			app.rect(0, app.height - 20, tam1, 20);// carga diseño 1
+			app.rect(1000, app.height - 20, tam2, 20);// carga diseño 2
 			jugador1.pintar();
 			jugador2.pintar();
+			for (int i = 0; i < recolectables.size(); i++) {
+				recolectables.get(i).pintar();
+			}
 			for (int i = 0; i < enemigos.length; i++) {
 				enemigos[i].pintar();
 			}
@@ -141,7 +172,12 @@ public class Logica extends Thread {
 	}
 
 	public void mousePressed() {
-
+//		if(app.mousePressed) {
+//			if(pantalla==3) {
+//				contador=true;
+//			}
+//			pantalla ++;
+//		}
 	}
 
 	public void keyPressed() {
@@ -211,9 +247,18 @@ public class Logica extends Thread {
 	public void crearRecolecables() {
 		switch (pantalla) {
 		case 2:
-			if (tiempo + 5000 < app.millis()) {
-				for (int i = 0; i < 10; i++) {
+			if (tiempo + 7000 < app.millis()) {
+				for (int i = 0; i < 5; i++) {
 					Recolectable elRecolectable = new Recolectable(app, (int) app.random(0, 4));
+					recolectables.add(elRecolectable);
+				}
+				tiempo = app.millis();
+			}
+			break;
+		case 4:
+			if (tiempo + 7000 < app.millis()) {
+				for (int i = 0; i < 5; i++) {
+					Recolectable elRecolectable = new Recolectable(app, (int) app.random(4, 7));
 					recolectables.add(elRecolectable);
 				}
 				tiempo = app.millis();
@@ -264,9 +309,5 @@ public class Logica extends Thread {
 	public LinkedList<RecogibleMalo> getRecogiblesMalos() {
 		return recogiblesMalos;
 	}
-	
-	
-	
-	
 
 }

@@ -13,7 +13,7 @@ public class Recolectable {
 	public Recolectable(Main app, int tipo){
 		this.app = app;
 	//  this.recolectables = new PImage[0];
-		this.pos = new PVector(app.random(25,app.width-tam),app.random(25,app.height-tam));
+		this.pos = new PVector(app.random(25,app.width-tam),app.random(25,app.height-220));
 		this.tam = 30;
 		this.tipo = tipo;
 	}
@@ -34,6 +34,18 @@ public class Recolectable {
 			break;
 		case 3:
 			app.fill(200,0,200);
+			app.ellipse(pos.x, pos.y, tam, tam);
+			break;
+		case 4:
+			app.fill(180,0,110);
+			app.ellipse(pos.x, pos.y, tam, tam);
+			break;
+		case 5:
+			app.fill(100,200,90);
+			app.ellipse(pos.x, pos.y, tam, tam);
+			break;
+		case 6:
+			app.fill(30,120,250);
 			app.ellipse(pos.x, pos.y, tam, tam);
 			break;
 		}

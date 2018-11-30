@@ -53,13 +53,16 @@ public class Jugador extends Personaje {
 					pos.x = pos.x - vel.x;
 				}
 			}
-
 			if (rastro1) {
 				this.vel = new PVector(1, 1);
 				if (tiempo + 5000 < app.millis()) {
 					this.vel = new PVector(5, 5);
 					rastro1=false;
 				}
+			}
+			
+			if(log.getPantalla()==4) {
+				
 			}
 
 			try {

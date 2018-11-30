@@ -116,8 +116,7 @@ public class Enemigo extends Personaje {
 					pos.y -= vel.y;
 				}
 
-			}
-			if (log.getJugador2().getPos().x > tam && log.getJugador2().getPos().x < app.width - tam
+			} else if (log.getJugador2().getPos().x > tam && log.getJugador2().getPos().x < app.width - tam
 					&& log.getJugador2().getPos().y > tam && log.getJugador2().getPos().y < app.height - 200) {
 
 				vel = new PVector(4, 4);
