@@ -20,7 +20,7 @@ public abstract class Personaje extends Thread {
 		this.log = log;
 		this.pos = new PVector(100, 100);
 		this.vel = new PVector(5, 5);
-		this.tam = 50; // Por defini
+		this.tam = 70; 
 		this.nivel = 0;
 		this.vivo = true;
 		this.recolectables = new LinkedList<Recolectable>();

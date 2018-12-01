@@ -24,21 +24,33 @@ public class Logica extends Thread {
 		this.app = app;
 		this.tiempo = 0;
 		this.tRastro = 0;
-		this.pantalla = 2;
+		this.pantalla = 0;
 		this.tam1 = 0;
 		this.tam2 = 0;
 		this.vivo = true;
 		this.contador = true;
 		this.recolectables = new LinkedList<Recolectable>();
 		this.recogiblesMalos = new LinkedList<RecogibleMalo>();
+		this.niveles = new PImage[9];
+		this.niveles[0] = app.loadImage("fondoNivel1.jpg");
+		this.niveles[1] = app.loadImage("fondoNivel2.jpg");
+		this.niveles[2] = app.loadImage("escritorio1.png");
+		this.niveles[3] = app.loadImage("escritorio2.png");
+		this.niveles[4] = app.loadImage("carga1.png");
+		this.niveles[5] = app.loadImage("carga2.png");
+		this.niveles[6] = app.loadImage("uno.jpg");
+		this.niveles[7] = app.loadImage("dos.jpg");
+		this.niveles[8] = app.loadImage("tres.jpg");
+		crearEnemigos();
 		this.jugador1 = new Jugador(app, this, 2);
-		jugador1.setNivel(5);
-		jugador1.setPos(new PVector(300, 100));
+		jugador1.setNivel(0);
+		jugador1.setPos(new PVector(350, 550));
 		jugador1.start();
 		this.jugador2 = new Jugador(app, this, 1);
-		jugador2.setNivel(3);
+		jugador2.setNivel(0);
+		jugador2.setPos(new PVector(850, 550));
 		jugador2.start();
-		crearEnemigos();
+		
 	}
 
 	public void run() {
@@ -52,7 +64,7 @@ public class Logica extends Thread {
 				break;
 			case 2:
 				if (contador) {
-					tiempo = app.millis() - 5000;
+					tiempo = app.millis() - 8000;
 					contador = false;
 				}
 				crearRecolecables();
@@ -62,7 +74,7 @@ public class Logica extends Thread {
 					enemigos[i].validarChoque(jugador1);
 					enemigos[i].validarChoque(jugador2);
 				}
-				if (tRastro + 6000 < app.millis()) {
+				if (tRastro + 9000 < app.millis()) {
 					for (int i = 0; i < enemigos.length; i++) {
 						enemigos[i].crearRastro(0);
 					}
@@ -77,10 +89,11 @@ public class Logica extends Thread {
 				break;
 			case 4:
 				if (contador) {
-					tiempo = app.millis() - 5000;
+					tiempo = app.millis() - 7000;
 					contador = false;
 				}
 				crearRecolecables();
+		
 				for (int i = 0; i < enemigos.length; i++) {
 					enemigos[i].mover();
 				}
@@ -88,16 +101,19 @@ public class Logica extends Thread {
 				if (jugador1.getPos().x > 0 && jugador1.getPos().x < 200 && jugador1.getPos().y > 500
 						&& jugador1.getPos().y < app.height) {
 					if (tam1 < 200) {
-						tam1 += 0.3;
+						tam1 += 0.03 * getJugador1().getNivel();
 					}
 				}
 
 				if (jugador2.getPos().x > 1000 && jugador2.getPos().x < app.width && jugador2.getPos().y > 500
 						&& jugador2.getPos().y < app.height) {
 					if (tam2 < 200) {
-						tam2 += 0.3;
-						System.out.println("adentro");
+						tam2 += 0.03 * getJugador2().getNivel();
 					}
+				}
+				for (int i = 0; i < enemigos.length; i++) {
+					enemigos[i].validarChoque(jugador1);
+					enemigos[i].validarChoque(jugador2);
 				}
 				break;
 			case 5:
@@ -122,12 +138,16 @@ public class Logica extends Thread {
 	public void pintar() {
 		switch (pantalla) {
 		case 0:
-
+			app.imageMode(app.CORNER);
+			app.image(niveles[6], 0, 0,1200,700);
 			break;
 		case 1:
-
+			app.imageMode(app.CORNER);
+			app.image(niveles[7], 0, 0,1200,700);
 			break;
 		case 2:
+			app.imageMode(app.CORNER);
+			app.image(niveles[0], 0, 0);
 			jugador1.pintar();
 			jugador2.pintar();
 			for (int i = 0; i < recolectables.size(); i++) {
@@ -141,17 +161,24 @@ public class Logica extends Thread {
 			}
 			break;
 		case 3:
-
+			app.imageMode(app.CORNER);
+			app.image(niveles[8], 0, 0,1200,700);
 			break;
 		case 4:
+			app.imageMode(app.CORNER);
+			app.image(niveles[1], 0, 0);
 			app.fill(100);
-			app.rect(0, 500, 200, 200);// pc del jugador de la izquierda
-			app.rect(1000, 500, 200, 200);// pc del jugador de la derecha
-			app.fill(0, 200, 200);
-			app.rect(0, app.height - 20, tam1, 20);// carga diseño 1
-			app.rect(1000, app.height - 20, tam2, 20);// carga diseño 2
+			app.fill(94, 22, 25);
+			app.rect(290, 620, tam1, 25);// carga diseño 1
+			app.fill(42, 17, 37);
+			app.rect(812, 620, tam2, 25);// carga diseño 2
 			jugador1.pintar();
 			jugador2.pintar();
+			app.imageMode(app.CORNER);
+			app.image(niveles[2], 0, 565);
+			app.image(niveles[3], 990, 565);
+			app.image(niveles[4], 220, 580);
+			app.image(niveles[5], 740, 580);
 			for (int i = 0; i < recolectables.size(); i++) {
 				recolectables.get(i).pintar();
 			}
@@ -172,12 +199,9 @@ public class Logica extends Thread {
 	}
 
 	public void mousePressed() {
-//		if(app.mousePressed) {
-//			if(pantalla==3) {
-//				contador=true;
-//			}
-//			pantalla ++;
-//		}
+	if(app.mousePressed) {
+		pantalla ++;
+		}
 	}
 
 	public void keyPressed() {
@@ -247,18 +271,18 @@ public class Logica extends Thread {
 	public void crearRecolecables() {
 		switch (pantalla) {
 		case 2:
-			if (tiempo + 7000 < app.millis()) {
-				for (int i = 0; i < 5; i++) {
-					Recolectable elRecolectable = new Recolectable(app, (int) app.random(0, 4));
+			if (tiempo + 8000 < app.millis()) {
+				for (int i = 0; i < 3; i++) {
+					Recolectable elRecolectable = new Recolectable(app, (int) app.random(0, 5));
 					recolectables.add(elRecolectable);
 				}
 				tiempo = app.millis();
 			}
 			break;
 		case 4:
-			if (tiempo + 7000 < app.millis()) {
-				for (int i = 0; i < 5; i++) {
-					Recolectable elRecolectable = new Recolectable(app, (int) app.random(4, 7));
+			if (tiempo + 8000 < app.millis()) {
+				for (int i = 0; i < 3; i++) {
+					Recolectable elRecolectable = new Recolectable(app, (int) app.random(5, 9));
 					recolectables.add(elRecolectable);
 				}
 				tiempo = app.millis();

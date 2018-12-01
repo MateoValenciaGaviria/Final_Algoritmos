@@ -14,6 +14,11 @@ public class Enemigo extends Personaje {
 		super(app, log);
 		this.mover1 = true;
 		this.vivo = true;
+		this.enemigos = new PImage[5];
+		this.enemigos[0] = app.loadImage("enemigo1.png");
+		this.enemigos[1] = app.loadImage("almohada.png");
+		this.rand = new PVector(0,0);
+		this.pos = new PVector(app.random(25,app.width-tam),app.random(25,app.height-220));
 	}
 
 	@Override
@@ -52,15 +57,13 @@ public class Enemigo extends Personaje {
 	public void pintar() {
 		switch (log.getPantalla()) {
 		case 2:
-			app.noStroke();
-			app.fill(100, 100, 100);
-			app.ellipse(pos.x, pos.y, tam, tam);
+			app.imageMode(app.CENTER);
+			app.image(enemigos[0], pos.x, pos.y);
 			break;
 
 		case 4:
-			app.noStroke();
-			app.fill(100, 100, 100);
-			app.ellipse(pos.x, pos.y, tam, tam);
+			app.imageMode(app.CENTER);
+			app.image(enemigos[1], pos.x, pos.y);
 			break;
 
 		}
@@ -69,7 +72,7 @@ public class Enemigo extends Personaje {
 
 	public void crearRastro(int tipo) {
 		// System.out.println("in");
-		RecogibleMalo r = new RecogibleMalo(app, tipo);
+		RecogibleMalo r = new RecogibleMalo(app);
 		PVector posi = new PVector(this.pos.x, this.pos.y);
 		r.setPos(posi);
 		log.setRecogiblesMalos(r);
@@ -99,10 +102,10 @@ public class Enemigo extends Personaje {
 			break;
 
 		case 4:
-			if (log.getJugador1().getPos().x > tam && log.getJugador1().getPos().x < app.width - tam
-					&& log.getJugador1().getPos().y > tam && log.getJugador1().getPos().y < app.height - 200) {
+			if (log.getJugador1().getPos().x > 0 && log.getJugador1().getPos().x < app.width
+					&& log.getJugador1().getPos().y > 0 && log.getJugador1().getPos().y < app.height - 200) {
 
-				vel = new PVector(4, 4);
+				vel = new PVector(3, 3);
 				if (pos.x < log.getJugador1().getPos().x) {
 					pos.x += vel.x;
 				}
@@ -116,10 +119,10 @@ public class Enemigo extends Personaje {
 					pos.y -= vel.y;
 				}
 
-			} else if (log.getJugador2().getPos().x > tam && log.getJugador2().getPos().x < app.width - tam
-					&& log.getJugador2().getPos().y > tam && log.getJugador2().getPos().y < app.height - 200) {
+			} else if (log.getJugador2().getPos().x > 0 && log.getJugador2().getPos().x < app.width
+					&& log.getJugador2().getPos().y > 0 && log.getJugador2().getPos().y < app.height - 200) {
 
-				vel = new PVector(4, 4);
+				vel = new PVector(3, 3);
 				if (pos.x < log.getJugador2().getPos().x) {
 					pos.x += vel.x;
 				}
@@ -159,7 +162,7 @@ public class Enemigo extends Personaje {
 		if (pos.dist(j.pos) < tam) {
 			if (j.getNivel() > 10) {
 				j.restarNivel(10);
-			} else {
+			}else {
 				j.restarNivel(j.getNivel());
 			}
 		}

@@ -9,31 +9,35 @@ public class RecogibleMalo {
 	private PVector pos;
 	private int tam,tipo;
 
-	public RecogibleMalo(Main app, int tipo){
+	public RecogibleMalo(Main app){
 		this.app = app;
-	//  this.recolectables = new PImage[0];
+	    this.recolectables = new PImage[5];
+	    this.recolectables[0] = app.loadImage("insta.png");
+	    this.recolectables[1] = app.loadImage("juego.png");
+	    this.recolectables[2] = app.loadImage("netflix.png");
+	    this.recolectables[3] = app.loadImage("wha.png");
+	    this.recolectables[4] = app.loadImage("youtube.png");
 		this.pos = new PVector(app.random(25,app.width-tam),app.random(25,app.height-tam));
 		this.tam = 30;
-		this.tipo = tipo;
+		this.tipo = (int) app.random(0,5);
 	}
 	
 	public void pintar(){
 		switch (tipo) {//tipo hace referencia l nivel si hacen lo mismo en dicho nivel
 		case 0:
-			app.fill(0,255,0);
-			app.rect(pos.x, pos.y, tam, tam);
+			app.image(recolectables[0], pos.x, pos.y);
 			break;
 		case 1:
-			app.fill(0,0,255);
-			app.ellipse(pos.x, pos.y, tam, tam);
+			app.image(recolectables[1], pos.x, pos.y);
 			break;
 		case 2:
-			app.fill(200,200,0);
-			app.ellipse(pos.x, pos.y, tam, tam);
+			app.image(recolectables[2], pos.x, pos.y);
 			break;
 		case 3:
-			app.fill(200,0,200);
-			app.ellipse(pos.x, pos.y, tam, tam);
+			app.image(recolectables[3], pos.x, pos.y);
+			break;
+		case 4:
+			app.image(recolectables[4], pos.x, pos.y);
 			break;
 		}
 	}

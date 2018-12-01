@@ -9,14 +9,14 @@ public class Jugador extends Personaje {
 	private PImage jugador1;
 	private PImage jugador2;
 	private int tipo;
-	private int tiempo;
+	private int tiempo, tiempoNivel;
 	private boolean arriba, abajo, izquierda, derecha, rastro1, ralentizado;
 
 	public Jugador(Main app, Logica log, int tipo) {
 		super(app, log);
 		// TODO Auto-generated constructor stub
-		// this.jugador1 = app.loadImage("");
-		// this.jugador2 = app.loadImage("");
+		this.jugador1 = app.loadImage("jugador1.png");
+		this.jugador2 = app.loadImage("jugador2.png");
 		this.tipo = tipo;
 		this.arriba = false;
 		this.abajo = false;
@@ -25,6 +25,7 @@ public class Jugador extends Personaje {
 		this.rastro1 = false;
 		this.ralentizado = false;
 		this.tiempo = 0;
+		this.tiempoNivel = app.millis() + 2000;
 	}
 
 	@Override
@@ -57,12 +58,17 @@ public class Jugador extends Personaje {
 				this.vel = new PVector(1, 1);
 				if (tiempo + 5000 < app.millis()) {
 					this.vel = new PVector(5, 5);
-					rastro1=false;
+					rastro1 = false;
 				}
 			}
-			
-			if(log.getPantalla()==4) {
-				
+
+			if (log.getPantalla() == 4) {
+				if (tiempo < app.millis()) {
+					if (nivel > 0) {
+						nivel--;
+					}
+					tiempo = app.millis() + 2000;
+				}
 			}
 
 			try {
@@ -77,21 +83,20 @@ public class Jugador extends Personaje {
 	@Override
 	public void pintar() {
 		// TODO Auto-generated method stub
-		app.ellipseMode(app.CENTER);
 		switch (tipo) {
 		case 1:
-			app.fill(255);
-			app.text(nivel, pos.x, pos.y - 40);
-			app.fill(255);
-			app.ellipse(pos.x, pos.y, tam, tam);
-			// app.image(jugador1, pos.x, pos.y);
+		
+			app.fill(42, 17, 37);
+			app.rect(pos.x+50, pos.y-50, nivel, 25);// carga diseño 2
+			app.imageMode(app.CENTER);
+			app.image(jugador1, pos.x, pos.y);
 			break;
 		case 2:
-			app.fill(255);
-			app.text(nivel, pos.x, pos.y - 40);
-			app.fill(255, 0, 0);
-			app.ellipse(pos.x, pos.y, tam, tam);
-			// app.image(jugador2, pos.x, pos.y);
+			
+			app.fill(94, 22, 25);
+			app.rect(pos.x+50, pos.y-50, nivel, 25);// carga diseño 1
+			app.imageMode(app.CENTER);
+			app.image(jugador2, pos.x, pos.y);
 			break;
 		}
 	}
@@ -179,7 +184,7 @@ public class Jugador extends Personaje {
 			if ((pos.dist(log.getRecogiblesMalos().get(i).getPos()) < tam)) {
 				rastros.add(log.getRecogiblesMalos().get(i));
 				log.getRecogiblesMalos().remove(i);
-				tiempo= app.millis();
+				tiempo = app.millis();
 				rastro1 = true;
 			}
 		}
